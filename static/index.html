@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Rep Counter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-image: url('/static/im1.jpg');
+      background-size:contain;
+      background-position: center;
+      color: #fff;
+    }
+
+    .section-container {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px auto;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+
+    select, button, input {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    h2 {
+      background-color: rgba(0,0,0,0.7);
+      padding: 10px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    h3 {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    #repStatus {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h2>AI Rep Counter</h2>
+
+  <div class="section-container">
+    <h3>🦾 Upper Body</h3>
+    <select id="upperBodySelect">
+      <option value="bicep_curl">Bicep Curl</option>
+      <option value="tricep_kickback">Tricep Kickback</option>
+      <option value="shoulder_press">Shoulder Press</option>
+      <option value="lateral_raise">Lateral Raise</option>
+      <option value="front_raise">Front Raise</option>
+    </select>
+    <button onclick="startExercise('upperBodySelect')">Start Upper Body Exercise</button>
+  </div>
+
+  <div class="section-container">
+    <h3>🦵 Lower Body</h3>
+    <select id="lowerBodySelect">
+      <option value="squat">Squat</option>
+      <option value="lunge">Lunge</option>
+      <option value="glute_bridge">Glute Bridge</option>
+      <option value="in_and_out">In & Out</option>
+      <option value="standing_kickback">Standing Kickback</option>
+    </select>
+    <button onclick="startExercise('lowerBodySelect')">Start Lower Body Exercise</button>
+  </div>
+
+  <div class="section-container">
+    <h3>🧘 Core & Compound</h3>
+    <select id="coreSelect">
+      <option value="mountain_climber">Mountain Climber</option>
+      <option value="situp">Situp</option>
+      <option value="pushup">Pushups</option>
+    </select>
+    <button onclick="startExercise('coreSelect')">Start Core Exercise</button>
+  </div>
+
+  <p id="repStatus"></p>
+
+  <script>
+    function startExercise(selectId) {
+      const exercise = document.getElementById(selectId).value;
+      document.getElementById("repStatus").innerText = "Starting " + exercise + "...";
+      fetch(`/start/${exercise}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("repStatus").innerText =
+            `You did ${data.total_reps} reps of ${data.exercise}!.. Good Job`;
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById("repStatus").innerText = "Error starting exercise.";
+        });
+    }
+  </script>
+</body>
+</html>
